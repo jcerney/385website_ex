@@ -1,0 +1,9 @@
+---
+title: "385website"
+---
+
+This is a Quarto website.
+
+To learn more about Quarto websites visit <https://quarto-dev.github.io/quarto-gallery/articles/html/html.html>
+
+I liked how it is a short code along. Can be used to structure past research work.

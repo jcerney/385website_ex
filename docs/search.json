@@ -1,0 +1,96 @@
+[
+  {
+    "objectID": "index.html",
+    "href": "index.html",
+    "title": "385website",
+    "section": "",
+    "text": "This is a Quarto website.\nTo learn more about Quarto websites visit https://quarto-dev.github.io/quarto-gallery/articles/html/html.html\nI liked how it is a short code along. Can be used to structure past research work.",
+    "crumbs": [
+      "Home",
+      "385website"
+    ]
+  },
+  {
+    "objectID": "about.html",
+    "href": "about.html",
+    "title": "About",
+    "section": "",
+    "text": "Jake Cerney is a statistics student at Chico State.",
+    "crumbs": [
+      "Home",
+      "About"
+    ]
+  },
+  {
+    "objectID": "ae03-gerrymander.html",
+    "href": "ae03-gerrymander.html",
+    "title": "AE03 - Exploring gerrymandring",
+    "section": "",
+    "text": "Load the tidyverse, usdata, and sjPlot packages, and get the gerrymander data out of the usdata package. View the data using glimpse.\n\nsuppressWarnings(library(tidyverse))\nlibrary(usdata)\nlibrary(sjPlot)\nlibrary(gtsummary)\ngerrymander &lt;- usdata::gerrymander\n#glimpse(gerrymander)",
+    "crumbs": [
+      "Home",
+      "Assignments",
+      "AE03"
+    ]
+  },
+  {
+    "objectID": "ae03-gerrymander.html#getting-started",
+    "href": "ae03-gerrymander.html#getting-started",
+    "title": "AE03 - Exploring gerrymandring",
+    "section": "",
+    "text": "Load the tidyverse, usdata, and sjPlot packages, and get the gerrymander data out of the usdata package. View the data using glimpse.\n\nsuppressWarnings(library(tidyverse))\nlibrary(usdata)\nlibrary(sjPlot)\nlibrary(gtsummary)\ngerrymander &lt;- usdata::gerrymander\n#glimpse(gerrymander)",
+    "crumbs": [
+      "Home",
+      "Assignments",
+      "AE03"
+    ]
+  },
+  {
+    "objectID": "ae03-gerrymander.html#congressional-districts-per-state",
+    "href": "ae03-gerrymander.html#congressional-districts-per-state",
+    "title": "AE03 - Exploring gerrymandring",
+    "section": "1. Congressional districts per state",
+    "text": "1. Congressional districts per state\nWhich state has the most congressional districts? The least? How many congressional districts are there in this state? Use functions such as table, tbl_summary or count.\n\ngerrymander %&gt;%\n  count(state) %&gt;%\n  arrange(desc(n))\n\n# A tibble: 50 × 2\n   state     n\n   &lt;chr&gt; &lt;int&gt;\n 1 CA       53\n 2 TX       36\n 3 FL       27\n 4 NY       27\n 5 IL       18\n 6 PA       18\n 7 OH       16\n 8 GA       14\n 9 MI       14\n10 NC       13\n# ℹ 40 more rows\n\n\nCalifornia has the most districts at 53. The states with 1 district are Arkansas, Delaware, Montana, North Dakota, South Dakota, Vermont, and Wyoming.",
+    "crumbs": [
+      "Home",
+      "Assignments",
+      "AE03"
+    ]
+  },
+  {
+    "objectID": "ae03-gerrymander.html#districts-at-the-tails",
+    "href": "ae03-gerrymander.html#districts-at-the-tails",
+    "title": "AE03 - Exploring gerrymandring",
+    "section": "2. Districts at the tails",
+    "text": "2. Districts at the tails\nMake side-by-side box plots of percent of vote received by Trump in the 2016 Presidential Election by prevalence of gerrymandering. Identify any Congressional Districts that are potential outliers — points that fall well outside the whiskers of their box, meaning that district’s Trump vote share was unusually high or low compared to other districts with the same gerrymandering prevalence. What information can you share about them?\n\nggplot(data = gerrymander,\n       mapping = aes(x = gerry, y = trump16, color = gerry)\n       ) +\n  geom_boxplot()\n\n\n\n\n\n\n\n\nLooking at the percentage of votes in a district for Trump in the 2016 presidential race by gerrymandering prevalence, the median for districts with high prevalence is a little more than 50%, a little less than 50% for middle prevalence, and low prevalence is slightly more than the middle prevalence’s percentage.\nTaking a closer look at Trump’s percentage of votes within low gerrymandering districts, we see 2 districts are outliers. These 2 districts have less than 10% of their votes for Trump. Let’s pick districts that have low gerrymandering and less than 10% of their votes for Trump.\n\ngerrymander %&gt;%\n  select(district, trump16, gerry) %&gt;%\n  filter(trump16 &lt; 10.0 & gerry == \"low\")\n\n# A tibble: 2 × 3\n  district trump16 gerry\n  &lt;chr&gt;      &lt;dbl&gt; &lt;fct&gt;\n1 NY-13        5.4 low  \n2 NY-15        4.9 low  \n\n\nWe see the 2 outlying districts are the 13th and 15th districts of New York, with the 13th having 5.4% of its votes for Trump and the 15th having 4.9%.",
+    "crumbs": [
+      "Home",
+      "Assignments",
+      "AE03"
+    ]
+  },
+  {
+    "objectID": "ae03-gerrymander.html#gerrymandering-and-flipping",
+    "href": "ae03-gerrymander.html#gerrymandering-and-flipping",
+    "title": "AE03 - Exploring gerrymandring",
+    "section": "3. Gerrymandering and flipping",
+    "text": "3. Gerrymandering and flipping\nThis relationship can be looked at from two directions — does gerrymandering predict a 2018 flip, and does a 2018 flip predict gerrymandering? Support both with a visualization and summary statistics. The plot answers “what does the mix look like within each group?”; the table gives the exact proportions the plot is showing. Write 1-2 bullet points about what you noticed from each plot. Use specific numbers in your answer.\nDirection 1: Is a Congressional District more likely to have high prevalence of gerrymandering if a Democrat was able to flip the seat in the 2018 election? To compare the breakdown of gerrymandering prevalence within each flipped group, make sure flip18 is on the x axis and that your percents add up to 100% within each category.\n\nggplot(data = gerrymander, \n       mapping = aes(x = flip18, fill = gerry)\n       ) +\n  geom_bar(position = \"fill\")\n\n\n\n\n\n\n\n\n\ntbl_summary(data = gerrymander,\n            by = flip18,\n            include = gerry\n            )\n\n\n\n\n\n\n\n\n\n\n\n\n\nCharacteristic\n-1\nN = 51\n0\nN = 3921\n1\nN = 381\n\n\n\n\ngerry\n\n\n\n\n\n\n\n\n    low\n2 (40%)\n52 (13%)\n8 (21%)\n\n\n    mid\n3 (60%)\n242 (62%)\n25 (66%)\n\n\n    high\n0 (0%)\n98 (25%)\n5 (13%)\n\n\n\n1 n (%)\n\n\n\n\n\n\n\n\nDirection 2: Is a Congressional District more likely to be flipped to a Democratic seat if it has high prevalence of gerrymandering, or low prevalence? Same two variables, just flipped — so now gerry is on the x-axis. Again, make sure your percents add up to 100% within each category.\n\nggplot(data = gerrymander,\n       mapping = aes(y = flip18, fill = gerry)\n       ) +\n  geom_bar(position = \"fill\")\n\n\n\n\n\n\n\n\n\ntbl_summary(data = gerrymander,\n            by = gerry,\n            include = flip18\n            )\n\n\n\n\n\n\n\n\n\n\n\n\n\nCharacteristic\nlow\nN = 621\nmid\nN = 2701\nhigh\nN = 1031\n\n\n\n\nflip18\n\n\n\n\n\n\n\n\n    -1\n2 (3.2%)\n3 (1.1%)\n0 (0%)\n\n\n    0\n52 (84%)\n242 (90%)\n98 (95%)\n\n\n    1\n8 (13%)\n25 (9.3%)\n5 (4.9%)\n\n\n\n1 n (%)\n\n\n\n\n\n\n\n\n\nBased on the first plot, a Congressional District is less likely to have high prevalence of gerrymandering if a Democrat was able to flip the seat in the 2018 election. If a Democrat flipped the seat in 2018 (when \\(x = 1\\)), districts with high gerrymandering make up only 5 (4.9%) of the total districts that flipped to a Democrat.\nFor the second, a district with low gerrymandering prevalence is more likely to be flipped to a Democrat compared to a district with high prevalence. This is because 8 (13%) of the total districts that flipped to a Democrat had a low prevalence compared to the 5 (4.9%) districts that flipped having high prevalence.",
+    "crumbs": [
+      "Home",
+      "Assignments",
+      "AE03"
+    ]
+  },
+  {
+    "objectID": "ae03-gerrymander.html#gerrymandering-and-presidential-margin",
+    "href": "ae03-gerrymander.html#gerrymandering-and-presidential-margin",
+    "title": "AE03 - Exploring gerrymandring",
+    "section": "4. Gerrymandering and presidential margin",
+    "text": "4. Gerrymandering and presidential margin\nUsing mutate, create a new variable, margin16, measuring how many percentage points Clinton won or lost by in each district (clinton16 - trump16). Does gerrymandering prevalence relate to how lopsided the 2016 presidential race was in that district? Report the min, mean, and max margin by gerry level, then visualize the full distribution with a violin + boxplot combo. Describe the shape, center, and spread of each group.\n\ngerrymander %&gt;%\n  mutate(margin16 = clinton16 - trump16) %&gt;%\n  summarise(min_margin = min(c(margin16, gerry)),\n            avg_margin = mean(c(margin16, gerry)),\n            max_margin = max(c(margin16, gerry))\n            )\n\n# A tibble: 1 × 3\n  min_margin avg_margin max_margin\n       &lt;dbl&gt;      &lt;dbl&gt;      &lt;dbl&gt;\n1        -63       2.67       88.9\n\n\nThe minimum margin is -63%. This means that Clinton’s worst loss in a district was losing by 63 percentage points. The mean margin is 2.67% points, which means on average, Clinton won by 2.67 percentage points in each district. The maximum margin, or Clinton’s highest win, was winning by 88.9 percentage points in one district. Now, let’s look at the full distribution using a violin plot and boxplot.\n\nggplot(data = gerrymander,\n       mapping = aes(x = gerry, y =  (clinton16 - trump16), fill = gerry)) +\n  labs(title = \"Percentage Points Clinton Won/Lost per District\",\n       subtitle = \"In Relation to Gerrymandering and District Results\",\n       x = \"Gerrymandering Prevalence Type\",\n       y = \"Margin Won/Lost by (as a percentage)\") +\n  geom_boxplot()\n\n\n\n\n\n\n\n\n\nggplot(data = gerrymander,\n       mapping = aes(x = gerry, y = (clinton16 - trump16), fill = gerry)) +\n  labs(title = \"Percentage Points Clinton Win/Loss by District\",\n       subtitle = \"In Relation to Gerrymandering and District Results\",\n       x = \"Gerrymandering Prevalence Type\",\n       y = \"Margin Won/Lost by (as a percentage)\") +\n  geom_violin(alpha = 0.8)\n\n\n\n\n\n\n\n\nThe violin plot does a good job showing how gerrymandered districts relate to how lopsided the 2016 presidential race was. For all three prevalence types, a larger spread of the data lies between -37.5% and 25%, with a very slight right skew for each. I say very slight since the boxplot shows the medians for all three of them is just below 0. On average, Clinton lost by a very close percentage in a district. With the three violin figures, the widest spread of data for each is from 0% to -25%.\nFor districts with low gerrymandering prevalence, we see that most of the data lies between -50% (with it tapering off there) and 25%, where the data continues to taper until above 75%. With middle gerrymandering prevalence, our data is bottom-heavy (near -25%), and narrows its way towards 62.5%. High gerrymandering districts look most like a violin. The figure is widest where Clinton lost in districts by nearly 25 percentage points, and the next widest spot is where Clinton won by 25 percentage points in a districts. This figure’s districts appear to be the most polarized in how they voted.\nSo, the average district had Clinton narrowly losing in the presidential race across all three gerrymandering prevalences. And, looking at the boxplot, the 50th and 75th quartile has a longer spread than the 25th and 50th quartile.",
+    "crumbs": [
+      "Home",
+      "Assignments",
+      "AE03"
+    ]
+  }
+]

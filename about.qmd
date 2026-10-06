@@ -1,0 +1,5 @@
+---
+title: "About"
+---
+
+Jake Cerney is a statistics student at Chico State.

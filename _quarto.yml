@@ -1,0 +1,33 @@
+project:
+  type: website
+  output-dir: docs
+
+website:
+  title: "My test website example"
+  navbar:
+    left:
+      - href: index.qmd
+        text: Home
+      - about.qmd
+      
+  sidebar:
+    style: "docked"
+    search: true
+    contents:
+      - index.qmd
+      - about.qmd
+      - section: "Assignments"
+        contents:
+        - href: ae03-gerrymander.qmd
+          text: AE03
+
+format:
+  html:
+    theme:
+      - lux
+      - brand
+    css: styles.css
+    toc: true
+
+
+
